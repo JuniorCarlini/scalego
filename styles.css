@@ -1,0 +1,68 @@
+body {
+  margin: 0;
+  background: #F8F8FA;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  color: #111114;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* :where() keeps these at zero specificity so any Tailwind text-color
+   class on a link (e.g. buttons styled as <a>) always wins, in every
+   state — otherwise a:hover's specificity beats a plain utility class
+   and the button text flips to purple on hover, killing contrast. */
+:where(a) {
+  color: #5B3FE0;
+  text-decoration: none;
+}
+
+:where(a:hover) {
+  color: #3F27B8;
+}
+
+input, button {
+  font-family: inherit;
+}
+
+#print-area {
+  display: none;
+}
+
+@page {
+  margin: 12mm;
+}
+
+@media print {
+  #app {
+    display: none !important;
+  }
+
+  #print-area {
+    display: block !important;
+  }
+
+  /* Without this, browsers drop background colors by default when printing —
+     every theme (Colorido/Neutro/Preto e branco/Roxo) would look the same
+     blank page instead of showing its actual colors. */
+  #print-area, #print-area * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Grid layouts don't fragment cleanly across a page break — without this a
+     month's calendar can get sliced in half at the page edge. Push the whole
+     month to the next page instead of cutting it. */
+  #print-area .scalego-print-month {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* The dashed page-break guide only makes sense on screen, as a preview. */
+  .scalego-page-break {
+    display: none !important;
+  }
+}

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScaleGo — monte sua escala sem complicação</title>
+<meta name="description" content="Monte a escala do seu time em 5 passos, sem conta e sem servidor. Convide por link, exporte em PDF, WhatsApp ou planilha.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .fade-card { box-shadow: 0 20px 45px -20px rgba(17,17,20,0.18); }
+  .dot-bg {
+    background-image: radial-gradient(#E6E6EC 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .shot-frame {
+    box-shadow: 0 30px 60px -25px rgba(17,17,20,0.25);
+  }
+</style>
+</head>
+<body class="bg-white">
+
+<header class="flex items-center justify-between gap-4 px-7 py-[18px] max-w-[1180px] mx-auto">
+  <div class="flex items-center gap-3">
+    <div class="w-9 h-9 rounded-[10px] bg-[#111114] text-white flex items-center justify-center font-extrabold text-[17px]">S</div>
+    <div class="font-extrabold text-[20px] tracking-[-0.02em]">ScaleGo</div>
+  </div>
+  <nav class="hidden sm:flex items-center gap-8 text-[14px] font-semibold text-[#44444E]">
+    <a href="#como-funciona" class="hover:text-[#111114]">Como funciona</a>
+    <a href="#recursos" class="hover:text-[#111114]">Recursos</a>
+    <a href="#faq" class="hover:text-[#111114]">Perguntas</a>
+  </nav>
+  <a href="app.html" class="h-10 px-5 rounded-[12px] border-none bg-[#111114] text-white font-semibold text-[13px] flex items-center hover:bg-[#2A2A30]">Criar escala grátis</a>
+</header>
+
+<!-- Hero -->
+<section class="dot-bg relative overflow-hidden">
+  <div class="max-w-[1180px] mx-auto px-5 pt-16 pb-28 relative">
+    <div class="flex flex-col items-center text-center gap-6 relative z-10">
+      <div class="text-[13px] font-semibold text-[#5B3FE0] bg-[#F0EDFF] px-4 py-1.5 rounded-full">100% grátis · sem conta · sem servidor</div>
+      <h1 class="text-[40px] sm:text-[56px] font-extrabold tracking-[-0.02em] leading-[1.05] max-w-[720px]">
+        Monte a escala do seu time <span class="text-[#5B3FE0]">em 5 passos</span>
+      </h1>
+      <p class="text-[17px] sm:text-[19px] text-[#6B6B76] max-w-[540px]">
+        Cadastra as pessoas, escolhe os dias, e o ScaleGo monta o revezamento sozinho — de forma justa. Ajusta na mão o que precisar, e exporta pra WhatsApp, PDF ou planilha.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+        <a href="app.html" class="h-12 px-7 rounded-[14px] border-none bg-[#111114] text-white font-semibold text-[15px] flex items-center hover:bg-[#2A2A30]">Criar minha escala →</a>
+        <a href="#como-funciona" class="h-12 px-7 rounded-[14px] border border-[#E6E6EC] bg-white text-[#111114] font-semibold text-[15px] flex items-center hover:bg-[#F4F4F7]">Ver como funciona</a>
+      </div>
+      <p class="text-[13px] text-[#8A8A94]">Sem cartão de crédito. Sem instalar nada. Seus dados ficam só no seu navegador.</p>
+    </div>
+
+    <!-- floating decorative cards -->
+    <div class="hidden lg:block absolute left-[2%] top-[22%] fade-card bg-white rounded-[16px] border border-[#EEEEF2] p-4 w-[210px] rotate-[-6deg]">
+      <div class="text-[11px] font-bold text-[#8A8A94] uppercase tracking-wide mb-2">Convidar por link</div>
+      <div class="text-[12px] text-[#44444E] truncate mb-2">.../#invite=eyJpZ...</div>
+      <div class="h-8 rounded-[8px] bg-[#111114] text-white text-[12px] font-semibold flex items-center justify-center">Copiar link</div>
+    </div>
+    <div class="hidden lg:block absolute right-[3%] top-[12%] fade-card bg-white rounded-[16px] border border-[#EEEEF2] p-4 w-[170px] rotate-[5deg]">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="w-5 h-5 rounded-[6px]" style="background:#EEEAFE"></span>
+        <span class="w-5 h-5 rounded-[6px]" style="background:#E6F6EC"></span>
+        <span class="w-5 h-5 rounded-[6px]" style="background:#FDEFE3"></span>
+      </div>
+      <div class="text-[13px] font-bold text-[#111114]">Ana <span class="text-[#5B3FE0]">4 dias</span></div>
+      <div class="text-[13px] font-bold text-[#111114]">Bruno <span class="text-[#5B3FE0]">3 dias</span></div>
+    </div>
+    <div class="hidden lg:block absolute right-[8%] bottom-[4%] fade-card bg-white rounded-[16px] border border-[#EEEEF2] px-4 py-3 rotate-[-3deg]">
+      <div class="text-[12px] text-[#8A8A94] font-semibold mb-1">Escala gerada</div>
+      <div class="h-7 px-3 rounded-[8px] bg-[#E8F7EE] text-[#1FA34A] font-semibold text-[13px] inline-flex items-center">8 dias · justo pra todo mundo</div>
+    </div>
+  </div>
+</section>
+
+<!-- Como funciona -->
+<section id="como-funciona" class="max-w-[1180px] mx-auto px-5 py-20">
+  <div class="flex flex-col items-center text-center gap-3 mb-14">
+    <div class="text-[13px] font-semibold text-[#5B3FE0] bg-[#F0EDFF] px-4 py-1.5 rounded-full">Como funciona</div>
+    <h2 class="text-[32px] sm:text-[38px] font-extrabold tracking-[-0.02em]">5 passos e pronto</h2>
+    <p class="text-[16px] text-[#6B6B76] max-w-[460px]">Sem tutorial, sem configuração complicada.</p>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+    <div class="flex flex-col gap-3 p-5 rounded-[16px] border border-[#EEEEF2]">
+      <div class="w-9 h-9 rounded-[10px] bg-[#F0EDFF] text-[#5B3FE0] font-extrabold flex items-center justify-center">1</div>
+      <div class="font-bold text-[15px]">Pessoas</div>
+      <div class="text-[13px] text-[#6B6B76]">Adiciona quem vai participar do revezamento.</div>
+    </div>
+    <div class="flex flex-col gap-3 p-5 rounded-[16px] border border-[#EEEEF2]">
+      <div class="w-9 h-9 rounded-[10px] bg-[#F0EDFF] text-[#5B3FE0] font-extrabold flex items-center justify-center">2</div>
+      <div class="font-bold text-[15px]">Período</div>
+      <div class="text-[13px] text-[#6B6B76]">Escolhe os meses. A escala segue de um pro outro.</div>
+    </div>
+    <div class="flex flex-col gap-3 p-5 rounded-[16px] border border-[#EEEEF2]">
+      <div class="w-9 h-9 rounded-[10px] bg-[#F0EDFF] text-[#5B3FE0] font-extrabold flex items-center justify-center">3</div>
+      <div class="font-bold text-[15px]">Dias</div>
+      <div class="text-[13px] text-[#6B6B76]">Todos os dias, só fim de semana, ou você escolhe.</div>
+    </div>
+    <div class="flex flex-col gap-3 p-5 rounded-[16px] border border-[#EEEEF2]">
+      <div class="w-9 h-9 rounded-[10px] bg-[#F0EDFF] text-[#5B3FE0] font-extrabold flex items-center justify-center">4</div>
+      <div class="font-bold text-[15px]">Ajustar</div>
+      <div class="text-[13px] text-[#6B6B76]">A escala já sai pronta e justa. Troca quem precisar na mão.</div>
+    </div>
+    <div class="flex flex-col gap-3 p-5 rounded-[16px] border border-[#EEEEF2]">
+      <div class="w-9 h-9 rounded-[10px] bg-[#F0EDFF] text-[#5B3FE0] font-extrabold flex items-center justify-center">5</div>
+      <div class="font-bold text-[15px]">Exportar</div>
+      <div class="text-[13px] text-[#6B6B76]">Manda por WhatsApp, gera PDF ou baixa a planilha.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Screenshot 1: ajuste -->
+<section class="max-w-[1180px] mx-auto px-5 py-20">
+  <div class="grid lg:grid-cols-2 gap-12 items-center">
+    <div class="flex flex-col gap-4">
+      <div class="text-[13px] font-semibold text-[#5B3FE0] bg-[#F0EDFF] px-4 py-1.5 rounded-full w-fit">Justo pra todo mundo</div>
+      <h2 class="text-[30px] sm:text-[34px] font-extrabold tracking-[-0.02em] leading-tight">A escala se organiza sozinha — você só ajusta o que quiser</h2>
+      <p class="text-[16px] text-[#6B6B76]">O ScaleGo distribui os dias equilibrando quem já trabalhou mais e há mais tempo. Não gostou de algum dia? Clica no nome e troca na hora — a mudança fica marcada, sem bagunçar o resto.</p>
+      <ul class="flex flex-col gap-3 mt-2">
+        <li class="flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-[#E8F7EE] text-[#1FA34A] flex items-center justify-center text-[13px] font-bold flex-shrink-0 mt-0.5">✓</span>
+          <span class="text-[15px] text-[#44444E]">Marca quem não pode em algum dia — a escala se reorganiza sozinha.</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-[#E8F7EE] text-[#1FA34A] flex items-center justify-center text-[13px] font-bold flex-shrink-0 mt-0.5">✓</span>
+          <span class="text-[15px] text-[#44444E]">Revezamento por dia ou mantendo a mesma dupla a semana toda.</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-[#E8F7EE] text-[#1FA34A] flex items-center justify-center text-[13px] font-bold flex-shrink-0 mt-0.5">✓</span>
+          <span class="text-[15px] text-[#44444E]">Não gostou do resultado? Um clique em "Embaralhar" e pronto.</span>
+        </li>
+      </ul>
+    </div>
+    <img src="assets/screenshot-ajustar.jpg" alt="Tela de ajuste da escala no ScaleGo" class="shot-frame rounded-[16px] border border-[#EEEEF2] w-full">
+  </div>
+</section>
+
+<!-- Recursos / screenshot 2 -->
+<section id="recursos" class="bg-[#FAFAFB] py-20">
+  <div class="max-w-[1180px] mx-auto px-5">
+    <div class="flex flex-col items-center text-center gap-3 mb-14">
+      <div class="text-[13px] font-semibold text-[#5B3FE0] bg-[#F0EDFF] px-4 py-1.5 rounded-full">Recursos</div>
+      <h2 class="text-[32px] sm:text-[38px] font-extrabold tracking-[-0.02em]">Do jeito que sua equipe precisa</h2>
+    </div>
+
+    <img src="assets/screenshot-exportar.jpg" alt="Tela de estilo e exportação do ScaleGo" class="shot-frame rounded-[16px] border border-[#EEEEF2] w-full mb-14">
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="bg-white rounded-[16px] border border-[#EEEEF2] p-6 flex flex-col gap-2">
+        <div class="font-bold text-[16px]">Convite por link</div>
+        <p class="text-[14px] text-[#6B6B76]">Cada pessoa abre um link, marca as datas específicas que não pode, e manda outro link de volta — sem app, sem cadastro.</p>
+      </div>
+      <div class="bg-white rounded-[16px] border border-[#EEEEF2] p-6 flex flex-col gap-2">
+        <div class="font-bold text-[16px]">4 estilos visuais</div>
+        <p class="text-[14px] text-[#6B6B76]">Colorido, neutro, preto e branco ou roxo — escolhe o visual que combina com a ocasião.</p>
+      </div>
+      <div class="bg-white rounded-[16px] border border-[#EEEEF2] p-6 flex flex-col gap-2">
+        <div class="font-bold text-[16px]">Logo e comunicado</div>
+        <p class="text-[14px] text-[#6B6B76]">Sobe o logo do seu time e escreve um aviso pra quem for ver a escala.</p>
+      </div>
+      <div class="bg-white rounded-[16px] border border-[#EEEEF2] p-6 flex flex-col gap-2">
+        <div class="font-bold text-[16px]">Exporta como quiser</div>
+        <p class="text-[14px] text-[#6B6B76]">WhatsApp com o texto pronto, PDF pra imprimir, ou planilha CSV pra abrir no Excel.</p>
+      </div>
+      <div class="bg-white rounded-[16px] border border-[#EEEEF2] p-6 flex flex-col gap-2">
+        <div class="font-bold text-[16px]">Calendário ou lista</div>
+        <p class="text-[14px] text-[#6B6B76]">Veja a escala em grade de calendário ou como uma lista simples, dia a dia.</p>
+      </div>
+      <div class="bg-white rounded-[16px] border border-[#EEEEF2] p-6 flex flex-col gap-2">
+        <div class="font-bold text-[16px]">Nada sai do seu navegador</div>
+        <p class="text-[14px] text-[#6B6B76]">Sem conta, sem login, sem banco de dados. Tudo salvo localmente, do seu jeito.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="max-w-[820px] mx-auto px-5 py-20">
+  <div class="flex flex-col items-center text-center gap-3 mb-12">
+    <div class="text-[13px] font-semibold text-[#5B3FE0] bg-[#F0EDFF] px-4 py-1.5 rounded-full">Perguntas</div>
+    <h2 class="text-[30px] sm:text-[34px] font-extrabold tracking-[-0.02em]">Dúvidas rápidas</h2>
+  </div>
+  <div class="flex flex-col gap-3">
+    <details class="group border border-[#EEEEF2] rounded-[14px] p-5">
+      <summary class="cursor-pointer font-bold text-[15px] list-none flex justify-between items-center">
+        Preciso criar conta ou pagar algo?
+        <span class="text-[#8A8A94] group-open:rotate-45 transition-transform">+</span>
+      </summary>
+      <p class="text-[14px] text-[#6B6B76] mt-3">Não. O ScaleGo é 100% grátis e não pede conta nem cartão. É só abrir e usar.</p>
+    </details>
+    <details class="group border border-[#EEEEF2] rounded-[14px] p-5">
+      <summary class="cursor-pointer font-bold text-[15px] list-none flex justify-between items-center">
+        Onde ficam salvos os dados da minha escala?
+        <span class="text-[#8A8A94] group-open:rotate-45 transition-transform">+</span>
+      </summary>
+      <p class="text-[14px] text-[#6B6B76] mt-3">Só no seu navegador (localStorage), no seu computador. Não existe servidor guardando nada — nem nós temos acesso.</p>
+    </details>
+    <details class="group border border-[#EEEEF2] rounded-[14px] p-5">
+      <summary class="cursor-pointer font-bold text-[15px] list-none flex justify-between items-center">
+        Como funciona o convite por link, sem app pra outra pessoa?
+        <span class="text-[#8A8A94] group-open:rotate-45 transition-transform">+</span>
+      </summary>
+      <p class="text-[14px] text-[#6B6B76] mt-3">O link carrega os dados da escala codificados nele mesmo. A pessoa marca os dias que não pode e gera outro link, que ela te manda de volta pra você importar — tudo sem backend.</p>
+    </details>
+    <details class="group border border-[#EEEEF2] rounded-[14px] p-5">
+      <summary class="cursor-pointer font-bold text-[15px] list-none flex justify-between items-center">
+        Se eu trocar de navegador ou computador, perco a escala?
+        <span class="text-[#8A8A94] group-open:rotate-45 transition-transform">+</span>
+      </summary>
+      <p class="text-[14px] text-[#6B6B76] mt-3">Como fica salvo só localmente, sim — por isso vale exportar em PDF ou planilha quando terminar de ajustar.</p>
+    </details>
+  </div>
+</section>
+
+<!-- CTA final -->
+<section class="dot-bg py-20">
+  <div class="max-w-[720px] mx-auto px-5 text-center flex flex-col items-center gap-5">
+    <h2 class="text-[32px] sm:text-[38px] font-extrabold tracking-[-0.02em]">Pronto pra organizar a escala do seu time?</h2>
+    <p class="text-[16px] text-[#6B6B76]">Leva menos de 2 minutos pra montar a primeira versão.</p>
+    <a href="app.html" class="h-12 px-8 rounded-[14px] border-none bg-[#111114] text-white font-semibold text-[15px] inline-flex items-center hover:bg-[#2A2A30]">Criar minha escala grátis →</a>
+  </div>
+</section>
+
+<footer class="border-t border-[#F1F1F4] py-10">
+  <div class="max-w-[1180px] mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <div class="w-7 h-7 rounded-[8px] bg-[#111114] text-white flex items-center justify-center font-extrabold text-[13px]">S</div>
+      <span class="font-bold text-[14px]">ScaleGo</span>
+    </div>
+    <p class="text-[13px] text-[#8A8A94]">Feito por Junior Carlini</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+<script>
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const lenis = new Lenis({ duration: 1.1 });
+    requestAnimationFrame(function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (!target) return;
+        event.preventDefault();
+        lenis.scrollTo(target, { offset: -20 });
+      });
+    });
+  }
+</script>
+
+</body>
+</html>
