@@ -12,7 +12,7 @@ const MONTH_LABELS = [
 const WEEKDAY_SHORT = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 const WEEKDAY_FULL = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
 const WEEKDAY_FULL_HEADER = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
-const STEP_LABELS = ['Pessoas', 'Período', 'Dias', 'Ajustar', 'Estilo e exportar'];
+const STEP_LABELS = ['Pessoas', 'Período', 'Dias', 'Ajustar', 'Exportar'];
 
 const PALETTE = [
   ['#EEEAFE', '#4B32C3'], ['#E6F6EC', '#17803D'], ['#FDEFE3', '#B5561A'], ['#E5F1FC', '#1F64B0'],
@@ -67,7 +67,7 @@ function createEmptySchedule() {
     logo: null,
     theme: 'colorful',
     view: 'calendar',
-    calendarScope: 'full',
+    calendarScope: 'selected',
     printDensity: 'comfortable',
     note: '',
     showAvailability: false,
@@ -349,8 +349,8 @@ function shellPage(bodyHtml, { maxW = '480px' } = {}) {
   return `
     <div style="min-height:100vh;display:flex;flex-direction:column">
       <header class="flex items-center gap-4 px-7 py-[18px] bg-white border-b border-[#EEEEF2]">${renderLogoMark()}</header>
-      <main class="flex-1 flex flex-col items-center px-5 pt-9 pb-12 gap-7">
-        <section class="w-full max-w-[${maxW}] bg-white border border-[#EEEEF2] rounded-[22px] p-8 flex flex-col gap-6">
+      <main class="flex-1 flex flex-col items-center px-3 sm:px-5 pt-9 pb-12 gap-7">
+        <section class="w-full max-w-[${maxW}] bg-white border border-[#EEEEF2] rounded-[22px] p-4 sm:p-8 flex flex-col gap-6">
           ${bodyHtml}
         </section>
       </main>
@@ -371,19 +371,23 @@ function groupDatesByMonth(dates) {
 }
 
 function renderInviteCalendar(payload) {
+  // Same reasoning as the organizer's Ajustar grid: only render the weekday
+  // columns that are actually candidate days, so a weekend-only (or similar)
+  // schedule gets much wider, easier-to-tap columns on a phone instead of
+  // 5 permanently-empty ones.
+  const activeCols = activeWeekdaysFor(payload.daysMode, payload.customWeekdays).slice().sort((a, b) => a - b);
   const months = groupDatesByMonth(candidateDatesFor(payload));
   return months.map(({ year, month, dates }) => {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const firstWeekday = new Date(year, month, 1).getDay();
     const byDay = {};
     dates.forEach((d) => { byDay[d.day] = d; });
-    const cells = [];
-    for (let i = 0; i < firstWeekday; i++) cells.push('<div></div>');
-    for (let day = 1; day <= daysInMonth; day++) {
+
+    const buildCell = (day) => {
+      if (day === null) return '<div></div>';
       const d = byDay[day];
-      if (!d) { cells.push(`<div class="min-h-[76px] p-2 text-[13px] text-[#B8B8C0]">${day}</div>`); continue; }
+      if (!d) return `<div class="min-h-[76px] p-2 text-[13px] text-[#B8B8C0]">${day}</div>`;
       const blocked = state.inviteBlocked.includes(d.iso);
-      cells.push(`
+      return `
         <button data-action="invite-toggle-date" data-date="${d.iso}"
           class="tuc-btn flex flex-col items-start justify-between gap-2 min-h-[76px] p-2 rounded-[12px] text-left cursor-pointer ${blocked
             ? 'border border-dashed border-[#E3A0A0] bg-[#FDF1F1]'
@@ -391,14 +395,24 @@ function renderInviteCalendar(payload) {
           <span class="text-[13px] font-bold" style="color:${blocked ? '#B42A2A' : '#111114'}">${day}</span>
           ${blocked ? '<span class="text-[11px] font-semibold text-[#B42A2A]">Não posso</span>' : ''}
         </button>
-      `);
+      `;
+    };
+
+    const weeks = [];
+    let week = new Array(7).fill(null);
+    for (let day = 1; day <= daysInMonth; day++) {
+      const wd = new Date(year, month, day).getDay();
+      week[wd] = day;
+      if (wd === 6) { weeks.push(week); week = new Array(7).fill(null); }
     }
+    if (week.some((v) => v !== null)) weeks.push(week);
+
     return `
       <div class="flex flex-col gap-3">
         <div class="font-bold text-[17px]">${MONTH_LABELS[month]} ${year}</div>
-        <div class="grid grid-cols-7 gap-[6px]">
-          ${WEEKDAY_SHORT.map((h) => `<div class="text-[11px] font-bold text-[#8A8A94] uppercase tracking-[0.06em] px-[6px]">${h}</div>`).join('')}
-          ${cells.join('')}
+        <div class="grid gap-1 sm:gap-[6px]" style="grid-template-columns:repeat(${activeCols.length},minmax(0,1fr))">
+          ${activeCols.map((wd) => `<div class="text-[11px] font-bold text-[#8A8A94] uppercase tracking-[0.06em] px-[6px]">${WEEKDAY_SHORT[wd]}</div>`).join('')}
+          ${weeks.map((w) => activeCols.map((wd) => buildCell(w[wd])).join('')).join('')}
         </div>
       </div>
     `;
@@ -505,7 +519,7 @@ function maxOk(schedule, index) {
 function renderStepsNav(schedule, maxW) {
   const step = schedule.step;
   return `
-    <nav class="w-full max-w-[${maxW}] grid grid-cols-5 gap-2">
+    <nav class="w-full max-w-[${maxW}] grid grid-cols-3 sm:grid-cols-5 gap-x-2 gap-y-4">
       ${STEP_LABELS.map((label, i) => {
         const bar = i <= step ? '#5B3FE0' : '#E6E6EC';
         const ink = i === step ? '#111114' : i < step ? '#5B3FE0' : '#9A9AA4';
@@ -545,9 +559,9 @@ function render() {
   document.getElementById('app').innerHTML = `
     <div style="min-height:100vh;display:flex;flex-direction:column">
       ${renderHeader()}
-      <main class="flex-1 flex flex-col items-center px-5 pt-9 pb-12 gap-7">
+      <main class="flex-1 flex flex-col items-center px-3 sm:px-5 pt-9 pb-12 gap-7">
         ${renderStepsNav(schedule, maxW)}
-        <section class="w-full max-w-[${maxW}] bg-white border border-[#EEEEF2] rounded-[22px] p-8 flex flex-col gap-6">
+        <section class="w-full max-w-[${maxW}] bg-white border border-[#EEEEF2] rounded-[22px] p-4 sm:p-8 flex flex-col gap-6">
           <div class="flex flex-col gap-[6px]">
             <div class="text-[13px] font-semibold text-[#5B3FE0]">Passo ${step + 1} de 5</div>
             <h1 class="m-0 text-[28px] font-extrabold tracking-[-0.02em]">${copy[0]}</h1>
@@ -775,20 +789,24 @@ function renderStepAdjust(schedule) {
     + Object.values(schedule.dateBlocks).reduce((a, b) => a + b.length, 0);
   let gaps = 0;
 
+  // Only the weekday columns actually used by the schedule are rendered —
+  // showing all 7 when, say, only weekends are scheduled would waste 5/7 of
+  // the grid on columns that can never hold an assignment, which is
+  // especially costly on narrow (mobile) screens.
+  const activeCols = activeWeekdays(schedule).slice().sort((a, b) => a - b);
+
   const monthsHtml = sortedMonths(schedule).map(({ year, month }) => {
-    const firstWeekday = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const cells = [];
     let scheduledDays = 0;
-    for (let i = 0; i < firstWeekday; i++) cells.push('<div></div>');
-    for (let day = 1; day <= daysInMonth; day++) {
+
+    const buildCell = (day) => {
+      if (day === null) return '<div></div>';
       const date = new Date(year, month, day);
       const weekday = date.getDay();
       const key = toISODate(date);
       const names = assignments[key];
       if (names === undefined) {
-        cells.push(`<div class="min-h-[96px] rounded-[12px] bg-[#FAFAFB] p-2 min-w-0"><div class="text-[13px] font-medium text-[#B8B8C0]">${day}</div></div>`);
-        continue;
+        return `<div class="min-h-[76px] sm:min-h-[96px] rounded-[12px] bg-[#FAFAFB] p-1.5 sm:p-2 min-w-0"><div class="text-[13px] font-medium text-[#B8B8C0]">${day}</div></div>`;
       }
       scheduledDays++;
       const missing = Math.max(0, perDay - names.length);
@@ -798,31 +816,47 @@ function renderStepAdjust(schedule) {
       const peopleHtml = names.map((name, slot) => {
         const c = colors[name];
         return `<button data-action="open-editor" data-date="${key}" data-slot="${slot}" data-weekday="${weekday}" data-day="${day}" data-month="${month}" data-year="${year}"
-          class="tuc-btn justify-start text-[12px] font-semibold px-[7px] py-[3px] rounded-[7px] border-none text-left cursor-pointer w-full whitespace-nowrap overflow-hidden text-ellipsis hover:brightness-[0.96]" style="background:${c.bg};color:${c.fg}">${escapeHtml(name)}</button>`;
+          class="tuc-btn justify-start text-[11px] sm:text-[12px] font-semibold px-1 sm:px-[7px] py-[3px] rounded-[7px] border-none text-left cursor-pointer w-full whitespace-nowrap overflow-hidden text-ellipsis hover:brightness-[0.96]" style="background:${c.bg};color:${c.fg}">${escapeHtml(name)}</button>`;
       }).join('');
       const gapHtml = Array.from({ length: missing }, () =>
         `<button data-action="open-editor" data-date="${key}" data-slot="${names.length}" data-weekday="${weekday}" data-day="${day}" data-month="${month}" data-year="${year}"
-          class="tuc-btn justify-start text-[12px] font-semibold px-[7px] py-[3px] rounded-[7px] border border-dashed border-[#E0C08A] bg-[#FFF9EF] text-[#9A5B00] text-left cursor-pointer w-full">+ Adicionar</button>`
+          class="tuc-btn justify-start text-[11px] sm:text-[12px] font-semibold px-1 sm:px-[7px] py-[3px] rounded-[7px] border border-dashed border-[#E0C08A] bg-[#FFF9EF] text-[#9A5B00] text-left cursor-pointer w-full">+ Adicionar</button>`
       ).join('');
-      cells.push(`
-        <div class="min-h-[96px] rounded-[12px] bg-white p-2 flex flex-col gap-[5px] min-w-0" style="border:1px solid ${border}">
+      return `
+        <div class="min-h-[76px] sm:min-h-[96px] rounded-[12px] bg-white p-1.5 sm:p-2 flex flex-col gap-[5px] min-w-0" style="border:1px solid ${border}">
           <div class="flex justify-between items-center">
             <span class="text-[13px] font-bold">${day}</span>
             ${edited ? '<span class="w-[6px] h-[6px] rounded-full" style="background:#5B3FE0"></span>' : ''}
           </div>
           ${peopleHtml}${gapHtml}
         </div>
-      `);
+      `;
+    };
+
+    const weeks = [];
+    let week = new Array(7).fill(null);
+    for (let day = 1; day <= daysInMonth; day++) {
+      const wd = new Date(year, month, day).getDay();
+      week[wd] = day;
+      if (wd === 6) { weeks.push(week); week = new Array(7).fill(null); }
     }
+    if (week.some((v) => v !== null)) weeks.push(week);
+    // Built into a variable (not inline in the template below) because
+    // buildCell has the scheduledDays/gaps side effects — the template's
+    // "${scheduledDays} dias" badge sits textually before this grid, and
+    // template substitutions evaluate left to right, so inlining it here
+    // would read scheduledDays before any cell incremented it.
+    const gridHtml = weeks.map((w) => activeCols.map((wd) => buildCell(w[wd])).join('')).join('');
+
     return `
       <div class="flex flex-col gap-3">
         <div class="flex justify-between items-center">
           <div class="font-bold text-[17px]">${MONTH_LABELS[month]} ${year}</div>
           <div class="h-7 px-3 rounded-[8px] bg-[#E8F7EE] text-[#1FA34A] font-semibold text-[13px] flex items-center">${scheduledDays} dias</div>
         </div>
-        <div class="grid grid-cols-7 gap-[6px]">
-          ${WEEKDAY_SHORT.map((h) => `<div class="text-[11px] font-bold text-[#8A8A94] uppercase tracking-[0.06em] px-[6px]">${h}</div>`).join('')}
-          ${cells.join('')}
+        <div class="grid gap-1 sm:gap-[6px]" style="grid-template-columns:repeat(${activeCols.length},minmax(0,1fr))">
+          ${activeCols.map((wd) => `<div class="text-[11px] font-bold text-[#8A8A94] uppercase tracking-[0.06em] px-[6px]">${WEEKDAY_SHORT[wd]}</div>`).join('')}
+          ${gridHtml}
         </div>
       </div>
     `;
@@ -1124,6 +1158,12 @@ function renderPreviewPaper(schedule, colors, assignments, months) {
         </div>
       `;
     };
+    // Day from the previous/next month, shown muted so the grid at a month
+    // turn doesn't read as broken empty cells — same idea as a normal
+    // calendar app, but never carries assignments (those belong to that
+    // day's own month block).
+    const renderOverflowCell = (day) => `<div style="min-height:${d.cellMin}px;border-radius:9px;padding:${d.cellPad}px;font-size:${d.dayFont}px;color:#D6D6DC">${day}</div>`;
+    const daysInPrevMonth = new Date(year, month, 0).getDate();
 
     if (schedule.calendarScope === 'selected' && activeWeekdays(schedule).length < 7) {
       const activeCols = activeWeekdays(schedule).slice().sort((a, b) => a - b);
@@ -1135,20 +1175,30 @@ function renderPreviewPaper(schedule, colors, assignments, months) {
         if (wd === 6) { weeks.push(week); week = new Array(7).fill(null); }
       }
       if (week.some((v) => v !== null)) weeks.push(week);
+      // Leading/trailing nulls in the first and last row are days outside
+      // this month — fill them with the neighboring month's dates (muted)
+      // instead of leaving blank grid cells.
+      const lastWeekday = new Date(year, month, daysInMonth).getDay();
+      weeks[0] = weeks[0].map((v, wd) => v !== null ? v : { overflow: true, day: daysInPrevMonth - firstWeekday + 1 + wd });
+      const lastIdx = weeks.length - 1;
+      weeks[lastIdx] = weeks[lastIdx].map((v, wd) => v !== null ? v : { overflow: true, day: wd - lastWeekday });
+      const renderSlot = (cell) => (cell && typeof cell === 'object' ? renderOverflowCell(cell.day) : renderCell(cell));
       return `
         <div class="scalego-print-month flex flex-col" style="gap:${d.monthGap}px">
           <div class="font-bold text-[15px]">${MONTH_LABELS[month]} ${year}</div>
           <div class="grid" style="gap:${d.gridGap}px;grid-template-columns:repeat(${activeCols.length},minmax(0,1fr))">
             ${activeCols.map((wd) => `<div class="font-bold text-[#8A8A94]" style="font-size:${d.headerFont}px;padding:0 4px">${WEEKDAY_FULL_HEADER[wd]}</div>`).join('')}
-            ${weeks.map((w) => activeCols.map((wd) => renderCell(w[wd])).join('')).join('')}
+            ${weeks.map((w) => activeCols.map((wd) => renderSlot(w[wd])).join('')).join('')}
           </div>
         </div>
       `;
     }
 
     const cells = [];
-    for (let i = 0; i < firstWeekday; i++) cells.push('<div></div>');
+    for (let i = 0; i < firstWeekday; i++) cells.push(renderOverflowCell(daysInPrevMonth - firstWeekday + 1 + i));
     for (let day = 1; day <= daysInMonth; day++) cells.push(renderCell(day));
+    const trailing = (7 - (cells.length % 7)) % 7;
+    for (let day = 1; day <= trailing; day++) cells.push(renderOverflowCell(day));
     return `
       <div class="scalego-print-month flex flex-col" style="gap:${d.monthGap}px">
         <div class="font-bold text-[15px]">${MONTH_LABELS[month]} ${year}</div>

@@ -1,3 +1,12 @@
+html, body {
+  /* Safety net: on a real phone, one element a hair too wide (long
+     untranslatable text, a fixed-width chip, whatever) drags the whole
+     page into horizontal scroll instead of just clipping. This is
+     cheaper to guarantee up front than to keep chasing every future
+     offender individually. */
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   background: #F8F8FA;
