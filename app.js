@@ -677,10 +677,12 @@ function renderStepPeople(schedule) {
       <div class="flex flex-wrap gap-2 min-h-[36px]">
         ${schedule.people.map((name) => {
           const c = colors[name];
-          return `<div class="flex items-center gap-1 h-10 pl-[14px] pr-1.5 rounded-[10px] text-[14px] font-semibold" style="background:${c.bg};color:${c.fg}">
+          return `<div class="flex items-center gap-1.5 h-10 pl-[14px] pr-2 rounded-[10px] text-[14px] font-semibold" style="background:${c.bg};color:${c.fg}">
             ${escapeHtml(name)}
-            <button data-action="remove-person" data-name="${escapeHtml(name)}"
-              class="tuc-btn is-icon is-sm p-0 min-w-0 border flex items-center justify-center leading-none hover:bg-black/10 cursor-pointer" style="color:inherit;border-color:currentColor">×</button>
+            <button data-action="remove-person" data-name="${escapeHtml(name)}" aria-label="Remover ${escapeHtml(name)}"
+              class="flex items-center justify-center flex-shrink-0 w-5 h-5 rounded-full border-none bg-black/10 hover:bg-black/25 active:bg-black/35 cursor-pointer transition-colors" style="color:inherit">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M5 5L19 19M19 5L5 19"/></svg>
+            </button>
           </div>`;
         }).join('')}
       </div>
@@ -864,12 +866,12 @@ function renderStepAdjust(schedule) {
 
   return `
     <div class="flex flex-col gap-5">
-      <div class="flex justify-between items-center gap-3 flex-wrap">
+      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <div class="flex items-center gap-[10px] flex-wrap">
           <span class="text-[13px] font-semibold text-[#6B6B76]">Revezar</span>
           ${segmented([{ id: 'day', label: 'Por dia' }, { id: 'week', label: 'Por semana' }], schedule.rotationMode, 'set-rotation-mode')}
         </div>
-        <div class="flex gap-2 flex-wrap">
+        <div class="grid grid-cols-2 sm:flex gap-2 sm:flex-wrap">
           ${hasOverrides ? `<button data-action="undo-overrides" class="tuc-btn ${BTN_SECONDARY}">Desfazer trocas</button>` : ''}
           <button data-action="toggle-availability" class="tuc-btn h-10 px-[14px] rounded-[12px] font-semibold text-[13px] cursor-pointer"
             style="border:1px solid ${schedule.showAvailability ? '#5B3FE0' : '#E6E6EC'};background:${schedule.showAvailability ? '#F0EDFF' : '#fff'};color:${schedule.showAvailability ? '#5B3FE0' : '#111114'}">Disponibilidade${blockedCount ? ` · ${blockedCount}` : ''}</button>
