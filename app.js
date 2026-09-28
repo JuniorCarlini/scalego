@@ -1026,7 +1026,7 @@ function renderStepExport(schedule) {
 
   return `
     <div class="flex flex-wrap gap-6 items-start">
-      <div class="flex-[0_1_300px] min-w-[260px] flex flex-col gap-[22px]">
+      <div class="w-full sm:w-auto sm:flex-[0_1_300px] min-w-[260px] flex flex-col gap-[22px]">
         <div class="flex flex-col gap-2">
           <div class="text-[14px] font-bold">Nome da escala</div>
           <input id="scaleNameInput" type="text" value="${escapeHtml(schedule.scaleName)}" placeholder="Escala de setembro"
