@@ -1,3 +1,10 @@
+html {
+  /* Without this, a browser/OS in dark mode renders native controls
+     (scrollbar, form fields) in a dark theme regardless of the page's
+     own light background — that's the heavy black scrollbar track. */
+  color-scheme: light;
+}
+
 html, body {
   /* Safety net: on a real phone, one element a hair too wide (long
      untranslatable text, a fixed-width chip, whatever) drags the whole
@@ -34,6 +41,33 @@ body {
 
 input, button {
   font-family: inherit;
+}
+
+/* Some browsers/OS themes render the default scrollbar as a heavy black
+   bar that clashes with the light design — style it to match instead. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #D9D9E0 transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #D9D9E0;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #B8B8C0;
 }
 
 #print-area {
