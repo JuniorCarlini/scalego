@@ -1,101 +1,76 @@
-# ScaleGo
+<div align="center">
 
-Gerador de escala de revezamento em 5 passos (pessoas, período, dias, ajustes,
-estilo e exportação). Sem backend: tudo roda estático e os dados ficam salvos
-no `localStorage` do navegador de quem está usando — sem conta, sem login,
-sem servidor.
+<img src="assets/logo.svg" alt="ScaleGo" height="64">
 
-## Estrutura
+### Monte a escala do seu time em 5 passos — sem conta, sem servidor.
 
-- `index.html` — landing page (raiz do site, é o que abre em `scalego.app`/GitHub Pages).
-- `app.html` — o gerador de escala em si (pra onde os botões "Criar escala" da landing apontam).
-- `app.js` / `styles.css` — lógica e estilos do `app.html`.
-- `assets/` — screenshots reais do app usados na landing.
+**[Abrir o ScaleGo →](https://juniorcarlini.github.io/scalego/)**
 
-## Rodando localmente
+</div>
 
-```
-python3 -m http.server 8000
-```
+<br>
 
-Depois abra `http://localhost:8000` (landing) ou `http://localhost:8000/app.html` (o gerador de escala direto).
+<div align="center">
+  <img src="assets/screenshot-ajustar.jpg" width="49%" alt="Tela de ajuste da escala">
+  <img src="assets/screenshot-exportar.jpg" width="49%" alt="Tela de estilo e exportação">
+</div>
 
-## Stack
+<br>
 
-- HTML + Tailwind (via CDN, classes com valores arbitrários `[...]` pra bater
-  pixel a pixel com o design) + JavaScript puro, sem passo de build.
-- Fonte "Plus Jakarta Sans" via Google Fonts, igual ao design aprovado.
-- [Tucano](https://juniorcarlini.github.io/tucano/) via CDN para o modal de
-  troca (`Tucano.Modal`, tamanho `md`), o alerta de "dias precisam de alguém"
-  (`tuc-alert is-warning`) e a classe `tuc-btn` em todos os botões (só pra
-  pegar a transição/foco dela — as cores e tamanhos continuam os do design).
-- Código (`app.js`) em inglês; textos de tela em português.
+## O que é
 
-O visual e a lógica do assistente de 5 passos foram portados 1:1 do design
-aprovado no Claude Design ("ScaleGo Passo a Passo v2"), que não usa Tucano —
-por isso cores, raios e espaçamentos são todos customizados via classes
-arbitrárias do Tailwind, e não vêm da lib.
+Escala de plantão, de limpeza, de horário, de time de trabalho — qualquer
+revezamento em que várias pessoas precisam se dividir em cima de um período.
+O ScaleGo monta isso sozinho: você cadastra quem participa, escolhe o período
+e os dias, e a escala sai pronta e justa, sem ninguém ficar sobrecarregado.
+Ajusta o que quiser na mão e manda pronto pra quem precisa.
 
-## Como o revezamento é gerado
+Sem conta, sem login, sem instalar nada. Roda inteiro no seu navegador —
+os dados da escala ficam salvos só ali, no seu computador.
 
-`generateSchedule` (em `app.js`) é uma função pura, também portada do design
-original: dado o estado atual da escala (pessoas, meses, dias da semana,
-pessoas por dia, disponibilidade, modo de revezamento e uma seed), ela
-recalcula o rodízio do zero a cada renderização — não existe um "botão gerar"
-separado, qualquer mudança de regra já reflete na hora. A ordem de prioridade
-pra escalar alguém é: quem tem menos dias até agora, depois quem foi escalado
-há mais tempo, depois uma ordem aleatória fixa (seed) — isso evita que a mesma
-pessoa fique presa numa sequência.
+## Como funciona
 
-Trocas manuais feitas no Passo 4 ficam em `schedule.overrides` e são
-descartadas sempre que uma regra de geração muda (pessoas, período, dias,
-pessoas por dia, disponibilidade, modo de revezamento ou "Embaralhar"), pra
-escala nunca ficar inconsistente — mesmo comportamento do design original.
+Um assistente de 5 passos: **Pessoas → Período → Dias → Ajustar → Estilo e
+exportação**. A escala é recalculada em tempo real a cada mudança — não tem
+botão "gerar", o resultado já aparece assim que você mexe em qualquer regra.
 
-## Exportação
+### Rodízio justo
 
-- **WhatsApp** e **Copiar**: geram o mesmo texto formatado (`*Nome da
-  escala*`, um bloco por mês, uma linha por dia).
-- **PDF**: usa `window.print()` com uma folha de estilo `@media print` — o
-  navegador oferece "Salvar como PDF" no próprio diálogo de impressão.
-- **Planilha**: gera um `.csv` com `;` como separador e BOM UTF-8 (abre certo
-  no Excel, acentos incluídos), sem depender de nenhuma biblioteca externa.
+Pra decidir quem entra em cada dia, a prioridade é sempre: primeiro quem tem
+**menos dias** acumulados até ali, depois quem foi escalado **há mais tempo**,
+e só em último caso uma ordem aleatória fixa — o suficiente pra ninguém ficar
+preso numa sequência ruim, sem parecer aleatório demais.
 
-## Convidar por link (Passo 4)
+Não gostou de uma troca específica? Clica no nome do dia e escolhe outra
+pessoa na hora — essa troca fica marcada e é preservada mesmo que a escala
+se reorganize, até que você mude alguma regra de geração (aí ela é refeita do
+zero, pra nunca ficar inconsistente).
 
-Funcionalidade extra, fora do design original: o botão "Convidar por link" (ao
-lado de "Disponibilidade") gera um link com o estado necessário (id da escala,
-nome, lista de pessoas, dias da semana perguntáveis) codificado em base64 no
-próprio fragmento da URL (`#invite=...`) — nunca sai do navegador, nenhum
-servidor guarda nada.
+### Convidar por link
 
-Quem recebe abre o link, escolhe o próprio nome (só entre quem já está na
-lista de pessoas) e vê o calendário de verdade (as mesmas datas do Passo 4,
-não os dias da semana em abstrato) pra marcar as datas específicas que NÃO
-pode — "não posso dia 12" é diferente de "não posso todo sábado". Isso gera um
-segundo link (`#response=...`) que a pessoa manda de volta. Quando esse link é
-aberto no navegador de quem organiza, aparece uma tela de confirmação — ao
-importar, as datas marcadas viram `schedule.dateBlocks[pessoa]` e a escala já
-é levada direto pro Passo 4 pra mostrar o resultado.
+Em vez de ficar perguntando um por um quem pode ou não em cada dia, dá pra
+gerar um link e mandar pra pessoa. Ela abre, escolhe o próprio nome, marca no
+calendário de verdade as datas específicas que **não** pode — "não posso dia
+12" é bem diferente de "não posso todo sábado" — e gera um link de resposta
+de volta. Você abre esse link e importa com um clique.
 
-Isso é separado do painel "Disponibilidade" (que bloqueia um dia da semana
-inteiro, recorrente, tipo "não pode nenhum domingo") — os dois bloqueios
-(recorrente e por data específica) valem ao mesmo tempo na hora de gerar a
-escala.
+Tudo isso viaja codificado no próprio link, sem passar por nenhum servidor.
 
-Tudo isso é roteado em `app.js` por `parseRoute()`, lido uma vez no carregamento
-e de novo a cada evento `hashchange` (cobre o caso de colar um link diferente
-numa aba que já está aberta).
+### Exportar
 
-## Publicar no GitHub Pages
+- **WhatsApp** e **Copiar** — texto já formatado, pronto pra colar.
+- **PDF** — pra imprimir ou guardar, com o layout adaptado pra página.
+- **Planilha** — um `.csv` que abre certinho no Excel, acentos incluídos.
 
-1. `git init`, primeiro commit.
-2. Criar um repositório novo no GitHub e dar push.
-3. Nas configurações do repositório, ativar GitHub Pages apontando para a
-   branch `main`, pasta raiz — como não tem build, os arquivos já são o site.
+## Privacidade
 
-## Ideia para depois (fase 2)
+Não existe backend. Nada do que você digita sai do seu navegador: as pessoas,
+os dias, os ajustes — tudo fica no `localStorage`. O link de convite carrega o
+estado necessário codificado nele mesmo, e o link de resposta faz o caminho de
+volta do mesmo jeito. Ninguém além de quem está com o link vê a escala.
 
-Se o uso local (um dispositivo só) deixar de ser suficiente, dá para trocar só
-a camada de persistência por um banco serverless gratuito (Firebase/Supabase)
-usando um "código da escala" como chave, sem mudar o resto do app.
+---
+
+<div align="center">
+Feito por <a href="https://github.com/JuniorCarlini">Junior Carlini</a>
+</div>
