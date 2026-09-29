@@ -338,9 +338,8 @@ function renderHeader() {
 
 function renderLogoMark() {
   return `
-    <a href="index.html" class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-[10px] bg-[#111114] text-white flex items-center justify-center font-extrabold text-[17px]">S</div>
-      <div class="font-extrabold text-[20px] tracking-[-0.02em] text-[#111114]">ScaleGo</div>
+    <a href="index.html" class="flex items-center">
+      <img src="assets/logo.svg" alt="ScaleGo" class="h-9 w-auto">
     </a>
   `;
 }
