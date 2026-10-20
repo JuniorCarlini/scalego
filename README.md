@@ -1,6 +1,9 @@
 <div align="center">
 
-<img src="assets/logo.svg" alt="ScaleGo" height="64">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+  <img src="assets/logo.svg" alt="ScaleGo" height="64">
+</picture>
 
 ### Monte a escala do seu time em 5 passos — sem conta, sem servidor.
 
